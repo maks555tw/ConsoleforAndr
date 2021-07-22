@@ -1,20 +1,92 @@
-﻿// ConsoleforAndr.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+﻿#include<iostream>
+#include <string>
 
-#include <iostream>
+using namespace std;
 
-int main()
+class Bracket
 {
-    std::cout << "Hello World!\n";
+    struct Node
+    {
+        char bracket;
+        Node* pNext;
+    };
+    int count;
+    Node* pHead;
+
+public:
+    Bracket()
+    {
+        pHead = nullptr;
+        count = 0;
+    }
+
+    Bracket(char obj)
+    {
+        Node* pCur = new Node;
+        pCur->bracket = obj;
+    }
+
+    bool addBracket(char obj)
+    {
+
+        Node* pNew = new Node;
+        if (pNew)
+        {
+            if (count == 0)
+            {
+                pHead = nullptr;
+            }
+            pNew->bracket = obj;
+            pNew->pNext = pHead;
+            pHead = pNew;
+            count++;
+            return true;
+        }
+        return false;
+    }
+
+    bool checkBrakets(char example)
+    {
+        if (count == 0 || pHead->bracket != example)
+        {
+            return false;
+        }
+        Node* pDel = new Node;
+        pDel = pHead;
+        pHead = pHead->pNext;
+        delete pDel;
+        pDel = nullptr;
+        count--;
+        return true;
+    }
+};
+
+void main()
+{
+    string some_text;
+    cout << "Enter your brackets : ";
+    getline(cin, some_text);
+    Bracket obj;
+    for (int i = 0; i < some_text.length(); ++i)
+    {
+        if (some_text[i] == '(' || some_text[i] == '[' || some_text[i] == '{')
+        {
+            obj.addBracket(some_text[i]);
+        }
+        if (some_text[i] == ')' || some_text[i] == ']' || some_text[i] == '}')
+        {
+            char tmp;
+            some_text[i] == ')' ? tmp = '(' : some_text[i] == ']' ? tmp = '[' : tmp = '{';
+            if (obj.checkBrakets(tmp))
+            {
+                cout << "Brackets confirmed" << endl;
+            }
+            else
+            {
+                cout << "Brackets do not meet each other!" << endl;
+                break;
+            }
+        }
+    }
+    system("pause");
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
